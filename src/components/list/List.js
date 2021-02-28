@@ -38,7 +38,7 @@ export default class List extends Component {
                 <table className="Table">
                     <thead className="Table-head">
                         <tr>
-                            {ths.map((th, index) => <th key={index}>{th}</th>)}
+                            {ths.map((columName, index) => <th key={index}>{columName}</th>)}
                         </tr>
                     </thead>
                     <tbody className="Table-body">
