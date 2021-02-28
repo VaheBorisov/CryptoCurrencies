@@ -30,9 +30,7 @@ export default class List extends Component {
         const {loading, ths, currencies} = this.state
 
         if(loading) {
-            return <div className="loading-container">
-                <Loading />
-            </div>
+            return <Loading />
         }
         
         return (

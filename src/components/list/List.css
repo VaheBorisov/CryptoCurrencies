@@ -1,9 +1,3 @@
-.loading-container {
-    width: 100%;
-    text-align: center;
-    margin: 40px auto;
-    }
-
 .Table-container {
     overflow-x: auto; /* Needed for table to be responsive */
 }
