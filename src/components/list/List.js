@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 
-import Loading from "../common/Loading"
+import Loading from "../common/Loading";
+import Table from "./Table";
+import Pagination from "./Pagination";
 
-import "./List.css";
 
 export default class List extends Component {
     constructor() {
@@ -10,65 +11,73 @@ export default class List extends Component {
         this.state = {
             loading: true,
             currencies: [],
-            ths: ["Cryptocurrency" , "Price" , "Market Cap" , "24H Change"]
+            ths: ["Cryptocurrency" , "Price" , "Market Cap" , "24H Change", "Favorites"],
+            page: 1,
+            totalPages: null
         }
 
     };
 
     componentDidMount() {
-        fetch("https://api.udilia.com/coins/v1/cryptocurrencies?page=1&perPage=20")
+        this.fetchCurrencies();
+    }
+
+
+    // handleRightClick = () => {
+    //     this.setState({
+    //         page: this.state.page + 1
+    //     }, this.fetchCurrencies);
+    // }
+
+    // handleLeftClick = () => {
+    //     this.setState({
+    //         page: this.state.page - 1
+    //     }, this.fetchCurrencies)
+    // }
+
+    handlePaginationClick = (direction) => {
+        let {page} = this.state;
+        page = direction === 'next' ? page + 1 : page - 1;
+
+        this.setState({
+            page
+        }, this.fetchCurrencies)
+    }
+
+    fetchCurrencies= () => {
+
+        this.setState({
+            loading: true
+        })
+
+        const {page} = this.state
+        fetch(`https://api.udilia.com/coins/v1/cryptocurrencies?page=${page}&perPage=20`)
             .then(response => response.json())
-            .then(({currencies}) => {
+            .then(({currencies, totalPages}) => {
                 this.setState({
                     currencies,
+                    totalPages,
                     loading: false 
-                })
+                });
             })
     }
 
     render() {
-        const {loading, ths, currencies} = this.state
+        const {loading, ths, currencies, page, totalPages} = this.state
 
         if(loading) {
             return <Loading />
         }
         
+        
         return (
-            <div className="Table-container">
-                <table className="Table">
-                    <thead className="Table-head">
-                        <tr>
-                            {ths.map((columName, index) => <th key={index}>{columName}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody className="Table-body">
-                        {currencies.map(({id,rank, price, marketCap, name, percentChange24h}) => (
-                            <tr key={id}>
-                                <td>
-                                    <span className="Table-rank">{rank}</span>
-                                    {name} 
-                                </td>
-                                <td>
-                                    <span className="Table-dollar">$</span>
-                                    {price}
-                                </td>
-                                <td>
-                                    <span className="Table-dollar">$</span>
-                                    {marketCap}
-                                </td>
-                                <td>
-                                    { percentChange24h > 0 
-                                        ? <span className="percent-raised">{percentChange24h}% &uarr;</span>
-                                        : percentChange24h < 0
-                                        ? <span className="percent-fallen">{percentChange24h}% &darr;</span>
-                                        : <span>{percentChange24h}</span>
-                                    }
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <React.Fragment>
+
+                <Table currencies={currencies} ths={ths}/>
+                
+                <Pagination page={page} totalPages={totalPages} handlePaginationClick={this.handlePaginationClick}/>
+                
+            </React.Fragment>
         );
     };
 }
