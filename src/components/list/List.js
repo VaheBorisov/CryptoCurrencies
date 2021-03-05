@@ -13,7 +13,8 @@ export default class List extends Component {
             currencies: [],
             ths: ["Cryptocurrency" , "Price" , "Market Cap" , "24H Change", "Favorites"],
             page: 1,
-            totalPages: null
+            totalPages: null,
+            favourites: JSON.parse(localStorage.getItem('favouritesList')) || []
         }
 
     };
@@ -62,8 +63,24 @@ export default class List extends Component {
             })
     }
 
+    handleAddFavorite = (id) => {
+        
+        if (this.state.favourites.length === 0 || !this.state.favourites.includes(id)) {
+            const favoriteList = [...this.state.favourites, id];
+            localStorage.setItem('favouritesList', JSON.stringify(favoriteList) );
+        };
+        
+        let favourites = JSON.parse(localStorage.getItem('favouritesList'));
+        if (this.state.favourites.includes(id)) favourites.splice(this.state.favourites.indexOf(id), 1);
+        localStorage.setItem('favouritesList', JSON.stringify(favourites));
+        this.setState({
+            favourites
+        });
+    };
+
+
     render() {
-        const {loading, ths, currencies, page, totalPages} = this.state
+        const {loading, ths, currencies, page, totalPages, favourites} = this.state
 
         if(loading) {
             return <Loading />
@@ -73,9 +90,18 @@ export default class List extends Component {
         return (
             <React.Fragment>
 
-                <Table currencies={currencies} ths={ths}/>
+                <Table 
+                    currencies={currencies}
+                    ths={ths} 
+                    handleAddFavorite={this.handleAddFavorite} 
+                    favourites={favourites}
+                />
                 
-                <Pagination page={page} totalPages={totalPages} handlePaginationClick={this.handlePaginationClick}/>
+                <Pagination 
+                    page={page} 
+                    totalPages={totalPages} 
+                    handlePaginationClick={this.handlePaginationClick}
+                />
                 
             </React.Fragment>
         );
