@@ -22,8 +22,6 @@ export default class List extends Component {
     componentDidMount() {
         this.fetchCurrencies();
     }
-
-
     // handleRightClick = () => {
     //     this.setState({
     //         page: this.state.page + 1
@@ -35,7 +33,6 @@ export default class List extends Component {
     //         page: this.state.page - 1
     //     }, this.fetchCurrencies)
     // }
-
     handlePaginationClick = (direction) => {
         let {page} = this.state;
         page = direction === 'next' ? page + 1 : page - 1;
@@ -50,7 +47,7 @@ export default class List extends Component {
         this.setState({
             loading: true
         })
-
+        
         const {page} = this.state
         fetch(`https://api.udilia.com/coins/v1/cryptocurrencies?page=${page}&perPage=20`)
             .then(response => response.json())
@@ -67,11 +64,14 @@ export default class List extends Component {
         
         if (this.state.favourites.length === 0 || !this.state.favourites.includes(id)) {
             const favoriteList = [...this.state.favourites, id];
+            
             localStorage.setItem('favouritesList', JSON.stringify(favoriteList) );
         };
         
         let favourites = JSON.parse(localStorage.getItem('favouritesList'));
-        if (this.state.favourites.includes(id)) favourites.splice(this.state.favourites.indexOf(id), 1);
+
+        this.state.favourites.includes(id) && favourites.splice(this.state.favourites.indexOf(id), 1);
+
         localStorage.setItem('favouritesList', JSON.stringify(favourites));
         this.setState({
             favourites
