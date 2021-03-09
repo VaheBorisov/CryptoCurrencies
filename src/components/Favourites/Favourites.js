@@ -72,42 +72,45 @@ class Favourites extends Component {
         }
 
         return (
-            <div className="Table-container">
-                <table className="Table">
-                    <thead className="Table-head">
-                        <tr>
-                            {ths.map((columName, index) => <th key={index}>{columName}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody className="Table-body">
-                    {this.filteredCurrencies().map(({id, rank, price, name, marketCap, percentChange24h}) => {
-                        return (
-                            <tr key={id}>
-                                <td onClick={() => history.push(`/currency/${id}`)}>
-                                    <span className="Table-rank">{rank}</span>
-                                    {name} 
-                                </td>
-                                <td>
-                                    <span className="Table-dollar">$</span>
-                                    {price}
-                                </td>
-                                <td>
-                                        <span className="Table-dollar">$</span>
-                                    {marketCap}
-                                </td>
-                                <td>
-                                    { renderChangePercent(percentChange24h) }
-                                </td>
-
-                                <td onClick={() => this.handleRemoveFavorite(id)}>
-                                    <MdFavorite size="25px" color="red"/>
-                                </td>
+            <>
+                <h1>Favorites <MdFavorite size="30px" color="red" className="heart"/></h1>
+                <div className="Table-container">
+                    <table className="Table">
+                        <thead className="Table-head">
+                            <tr>
+                                {ths.map((columName, index) => <th key={index}>{columName}</th>)}
                             </tr>
-                        )
-                    })}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className="Table-body">
+                        {this.filteredCurrencies().map(({id, rank, price, name, marketCap, percentChange24h}) => {
+                            return (
+                                <tr key={id}>
+                                    <td onClick={() => history.push(`/currency/${id}`)}>
+                                        <span className="Table-rank">{rank}</span>
+                                        {name} 
+                                    </td>
+                                    <td>
+                                        <span className="Table-dollar">$</span>
+                                        {price}
+                                    </td>
+                                    <td>
+                                            <span className="Table-dollar">$</span>
+                                        {marketCap}
+                                    </td>
+                                    <td>
+                                        { renderChangePercent(percentChange24h) }
+                                    </td>
+
+                                    <td onClick={() => this.handleRemoveFavorite(id)}>
+                                        <MdFavorite size="25px" color="red"/>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
+            </>
         )
     }
 } 
