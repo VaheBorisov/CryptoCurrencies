@@ -7,3 +7,8 @@ h1 {
 .heart {
     margin-left: 10px;
 }
+
+.NotFound-title {
+    font-weight: 400;
+    color: #9cb3c9;
+}

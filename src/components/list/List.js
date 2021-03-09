@@ -18,7 +18,7 @@ export default class List extends Component {
             currencies: [],
             page: 1,
             totalPages: null,
-            favourites: JSON.parse(sessionStorage.getItem('favouritesList')) || []
+            favourites: JSON.parse(localStorage.getItem('favouritesList')) || []
         }
 
     };
@@ -59,14 +59,14 @@ export default class List extends Component {
         if (this.state.favourites.length === 0 || !this.state.favourites.includes(id)) {
             const favoriteList = [...this.state.favourites, id];
             
-            sessionStorage.setItem('favouritesList', JSON.stringify(favoriteList) );
+            localStorage.setItem('favouritesList', JSON.stringify(favoriteList) );
         };
         
-        let favourites = JSON.parse(sessionStorage.getItem('favouritesList'));
+        let favourites = JSON.parse(localStorage.getItem('favouritesList'));
 
         this.state.favourites.includes(id) && favourites.splice(this.state.favourites.indexOf(id), 1);
 
-        sessionStorage.setItem('favouritesList', JSON.stringify(favourites));
+        localStorage.setItem('favouritesList', JSON.stringify(favourites));
         this.setState({
             favourites
         });
