@@ -79,7 +79,7 @@ class Favourites extends Component {
 
         return (
             <>
-                <h1>Favorites <MdFavorite size="30px" color="red" className="heart"/></h1>
+                <h1 className="favorite-title">Favorites <MdFavorite size="30px" color="red" className="heart"/></h1>
                 {
                     this.dontHaveFavourites() ||
 
