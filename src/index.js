@@ -20,7 +20,7 @@ function App() {
         <Switch>
           <Route path="/" component={List} exact />
           <Route path="/currency/:currencyId" component={Detail} exact/>
-          <Route path="/currnecy/favourites" component={Favourites} exact/>
+          <Route path="/currencies/favourites" component={Favourites} exact/>
           <Route component={NotFound} />
         </Switch>  
       </div>

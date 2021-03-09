@@ -11,7 +11,7 @@ export default function Header() {
         <div className="Header">
             <Link to="/" > <img src={logo} alt="logo" className="Header-logo" /> </Link>
 
-            <Link to="/currnecy/favourites" className="favourites" >Favourites</Link>
+            <Link to="/currencies/favourites" className="favourites">Favourites</Link>
         </div>
     );
 };
