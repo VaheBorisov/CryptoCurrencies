@@ -1,10 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md'
 
 import "./Table.css"
 
-export default function Table({currencies, ths, handleAddFavorite, favourites}) {
+import { renderChangePercent } from '../../helpers'
+
+function Table({currencies, ths, handleAddFavorite, favourites, history}) {
 
     return (
         <div className="Table-container">
@@ -17,7 +20,7 @@ export default function Table({currencies, ths, handleAddFavorite, favourites}) 
                 <tbody className="Table-body">
                     {currencies.map(({id,rank, price, marketCap, name, percentChange24h}) => (
                         <tr key={id}>
-                            <td>
+                            <td onClick={() => history.push(`/currency/${id}`)}>
                                 <span className="Table-rank">{rank}</span>
                                 {name} 
                             </td>
@@ -30,12 +33,7 @@ export default function Table({currencies, ths, handleAddFavorite, favourites}) 
                                 {marketCap}
                             </td>
                             <td>
-                                { percentChange24h > 0 
-                                    ? <span className="percent-raised">{percentChange24h}% &uarr;</span>
-                                    : percentChange24h < 0
-                                    ? <span className="percent-fallen">{percentChange24h}% &darr;</span>
-                                    : <span>{percentChange24h}</span>
-                                }
+                                { renderChangePercent(percentChange24h) }
                             </td>
 
                             <td onClick={() => handleAddFavorite(id)}>
@@ -51,4 +49,6 @@ export default function Table({currencies, ths, handleAddFavorite, favourites}) 
             </table>
         </div>
     )
-}
+};
+
+export default withRouter(Table)
