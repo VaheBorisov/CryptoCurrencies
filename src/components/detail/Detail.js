@@ -22,9 +22,8 @@ export default class Detail extends Component {
     componentDidMount() {
         this.setState({loading: true})
 
-        const currencyId = this.props.match.params.currencyId
-        // console.log(currencyId);
-
+        const currencyId = this.props.match.params.currencyId;
+        
         fetch(`${API_URL}/cryptocurrencies/${currencyId}`)
             .then(handleResponse)
             .then(currency => {

@@ -3,12 +3,17 @@
     align-items: center;
     justify-content: center;
     color: red;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .heart {
     margin-left: 10px;
 }
 
 .NotFound-title {
+    text-align: center;
     font-weight: 400;
     color: #9cb3c9;
 }

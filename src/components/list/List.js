@@ -5,7 +5,7 @@ import Table from "./Table";
 import Pagination from "./Pagination";
 
 import { API_URL, ths } from '../../config';
-import { handleResponse } from "../../helpers";
+import { fetchCurrencies, handleAddFavorite } from "../../helpers";
 
 
 
@@ -24,7 +24,8 @@ export default class List extends Component {
     };
 
     componentDidMount() {
-        this.fetchCurrencies();
+        const {page} = this.state
+        fetchCurrencies.call(this, `${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
     }
     
         handlePaginationClick = (direction) => {
@@ -35,43 +36,6 @@ export default class List extends Component {
             page
         }, this.fetchCurrencies)
     }
-
-    fetchCurrencies = () => {
-
-        this.setState({
-            loading: true
-        })
-        
-        const {page} = this.state
-        fetch(`${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
-            .then(handleResponse)
-            .then(({currencies, totalPages}) => {
-                this.setState({
-                    currencies,
-                    totalPages,
-                    loading: false 
-                });
-            })
-    }
-
-    handleAddFavorite = (id) => {
-        
-        if (this.state.favourites.length === 0 || !this.state.favourites.includes(id)) {
-            const favoriteList = [...this.state.favourites, id];
-            
-            localStorage.setItem('favouritesList', JSON.stringify(favoriteList) );
-        };
-        
-        let favourites = JSON.parse(localStorage.getItem('favouritesList'));
-
-        this.state.favourites.includes(id) && favourites.splice(this.state.favourites.indexOf(id), 1);
-
-        localStorage.setItem('favouritesList', JSON.stringify(favourites));
-        this.setState({
-            favourites
-        });
-    };
-
 
     render() {
         const {loading, currencies, page, totalPages, favourites} = this.state
@@ -87,7 +51,7 @@ export default class List extends Component {
                 <Table 
                     currencies={currencies}
                     ths={ths} 
-                    handleAddFavorite={this.handleAddFavorite} 
+                    handleAddFavorite={handleAddFavorite.bind(this)} 
                     favourites={favourites}
                 />
                 
