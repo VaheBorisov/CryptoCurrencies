@@ -7,41 +7,51 @@ import "./Table.css"
 
 import { renderChangePercent } from '../../helpers'
 
-function Table({currencies, ths, handleAddFavorite, favourites, history}) {
+function Table({currencies, onFavoriteClick, favorites, history}) {
+
+    // const favoritesIDs = favorites.map(item => item.id)
 
     return (
         <div className="Table-container">
             <table className="Table">
                 <thead className="Table-head">
                     <tr>
-                        {ths.map((columName, index) => <th key={index}>{columName}</th>)}
+                        <th>Cryptocurrency</th>
+                        <th>Price</th>
+                        <th>Market Cap</th>
+                        <th>24H Change</th>
+                        <th>Favorites </th>
                     </tr>
                 </thead>
                 <tbody className="Table-body">
-                    {currencies.map(({id,rank, price, marketCap, name, percentChange24h}) => (
-                        <tr key={id}>
-                            <td onClick={() => history.push(`/currency/${id}`)}>
-                                <span className="Table-rank">{rank}</span>
-                                {name} 
+                    {currencies.map( currency => (
+                        <tr key={currency.id} onClick={() => history.push(`/currency/${currency.id}`)}>
+                            <td>
+                                <span className="Table-rank">{currency.rank}</span>
+                                {currency.name} 
                             </td>
                             <td>
                                 <span className="Table-dollar">$</span>
-                                {price}
+                                {currency.price}
                             </td>
                             <td>
                                 <span className="Table-dollar">$</span>
-                                {marketCap}
+                                {currency.marketCap}
                             </td>
                             <td>
-                                { renderChangePercent(percentChange24h) }
+                                { renderChangePercent(currency.percentChange24h) }
                             </td>
 
-                            <td onClick={() => handleAddFavorite(id)}>
+                            <td onClick={event => onFavoriteClick(event , currency)} >
                                 
-                                {favourites.includes(id) 
+                                {
+                                    favorites.includes(currency.id)
                                     ? <MdFavorite size="25px" color="red"/>
                                     : <MdFavoriteBorder size="25px" color="red"/>
                                 }
+                                {/* {
+                                    console.log(favorites, currency)
+                                } */}
                             </td>
                         </tr>
                     ))}

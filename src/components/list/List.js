@@ -4,8 +4,8 @@ import Loading from "../common/Loading";
 import Table from "./Table";
 import Pagination from "./Pagination";
 
-import { API_URL, ths } from '../../config';
-import { fetchCurrencies, handleAddFavorite } from "../../helpers";
+import { API_URL } from '../../config';
+import { handleResponse, onFavoriteClickCB } from "../../helpers";
 
 
 
@@ -18,17 +18,16 @@ export default class List extends Component {
             currencies: [],
             page: 1,
             totalPages: null,
-            favourites: JSON.parse(localStorage.getItem('favouritesList')) || []
+            favorites: JSON.parse(localStorage.getItem('favorites')) || []
         }
 
     };
 
     componentDidMount() {
-        const {page} = this.state
-        fetchCurrencies.call(this, `${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
+        this.fetchCurrencies()
     }
     
-        handlePaginationClick = (direction) => {
+    handlePaginationClick = (direction) => {
         let {page} = this.state;
         page = direction === 'next' ? page + 1 : page - 1;
 
@@ -37,8 +36,40 @@ export default class List extends Component {
         }, this.fetchCurrencies)
     }
 
+    fetchCurrencies() {
+        this.setState({ loading: true });
+        
+        const { page } = this.state;
+    
+        fetch(`${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
+          .then(handleResponse)
+          .then((data) => {
+            const { currencies, totalPages } = data;
+    
+            this.setState({
+              currencies,
+              totalPages,
+              loading: false,
+            });
+          })
+          .catch((error) => {
+            this.setState({
+              error: error.errorMessage,
+              loading: false,
+            });
+          });
+    }
+
+    handleFavoriteClick = (event , currency) => {
+        event.stopPropagation();
+
+        this.setState(prevState => onFavoriteClickCB(prevState , currency))
+        
+    }
+
     render() {
-        const {loading, currencies, page, totalPages, favourites} = this.state
+        const {loading, currencies, page, totalPages, favorites} = this.state;
+        const favoriteIDs = favorites.map(item => item.id);
 
         if(loading) {
             return <Loading />
@@ -50,9 +81,8 @@ export default class List extends Component {
 
                 <Table 
                     currencies={currencies}
-                    ths={ths} 
-                    handleAddFavorite={handleAddFavorite.bind(this)} 
-                    favourites={favourites}
+                    onFavoriteClick={this.handleFavoriteClick} 
+                    favorites={favoriteIDs}
                 />
                 
                 <Pagination 
