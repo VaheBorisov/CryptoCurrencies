@@ -39,7 +39,16 @@ export default class Detail extends Component {
       });
   }
 
+  componentWillReceiveProps(nextProps) {
 
+    if(nextProps.match.params.currencyId !== this.props.match.params.currencyId){
+
+      const currencyId = nextProps.match.params.currencyId;
+
+      this.fetchCurrency(currencyId);
+    }
+
+  }
 
   componentDidMount() {
 
