@@ -72,7 +72,9 @@ export default class List extends Component {
         const favoriteIDs = favorites.map(item => item.id);
 
         if(loading) {
-            return <Loading />
+            return <div className="loading-container">
+                <Loading />
+            </div>
         }
         
         
