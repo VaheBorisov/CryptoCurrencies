@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md'
@@ -8,8 +9,6 @@ import "./Table.css"
 import { renderChangePercent } from '../../helpers'
 
 function Table({currencies, onFavoriteClick, favorites, history}) {
-
-    // const favoritesIDs = favorites.map(item => item.id)
 
     return (
         <div className="Table-container">
@@ -49,9 +48,6 @@ function Table({currencies, onFavoriteClick, favorites, history}) {
                                     ? <MdFavorite size="25px" color="red"/>
                                     : <MdFavoriteBorder size="25px" color="red"/>
                                 }
-                                {/* {
-                                    console.log(favorites, currency)
-                                } */}
                             </td>
                         </tr>
                     ))}
@@ -60,5 +56,10 @@ function Table({currencies, onFavoriteClick, favorites, history}) {
         </div>
     )
 };
+
+Table.propTypes = {
+    currencies: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired,
+  }
 
 export default withRouter(Table)
